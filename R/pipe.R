@@ -1,0 +1,10 @@
+#' Export the pipe operator
+#'
+#' Like dplyr and the tidyverse, MetaRVM-calibration uses the \code{\%>\%} operator
+#' @importFrom magrittr %>%
+#' @name %>%
+#' @rdname pipe
+#' @export
+#' @param lhs,rhs A visualisation and a function to apply to it
+#' @examples
+NULL

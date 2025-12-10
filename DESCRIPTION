@@ -1,0 +1,42 @@
+Package: calibrateMetaRVM
+Title: Calibrating the MetaRVM Model
+Version: 1.0.0
+Authors@R: c(
+    person("Arindam", "Fadikar", , "afadikar@anl.gov", role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-7396-0350")),
+    person("David", "O'Gara", , "dogara@anl.gov", role = "ctb", comment = c(ORCID = "0000-0002-1957-400X")),
+    person("Charles", "Macal", role = "ctb"),
+    person("Martinez Moyano", "Ignacio Javier", role = "ctb"),
+    person("Ozik", "Jonathan", role = "ctb")
+  )
+Description: A package to calibrate the MetaRVM model.
+URL: https://github.com/RESUME-Epi/calibrate_MetaRVM
+BugReports: https://github.com/RESUME-Epi/calibrate_MetaRVM/issues
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 3.5.0)
+LazyData: true
+Imports: 
+    data.table,
+    stringr,
+    dde,
+    dplyr,
+    MetaRVM,
+    magrittr,
+    doParallel,
+    foreach,
+    parallel,
+    lhs,
+    laGP,
+    mvtnorm,
+    xfun,
+    yaml
+Remotes:
+  RESUME-EPI/MetaRVM
+Suggests: 
+    knitr,
+    pkgdown,
+    rmarkdown
+VignetteBuilder: knitr, rmarkdown
