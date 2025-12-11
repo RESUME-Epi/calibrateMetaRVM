@@ -167,14 +167,8 @@ data_dir <- dirname(base_config[1])
 
 results = list()
 
-
-# initial version of pars
-#pars01 <- lhs::randomLHS(init_nsim, k = np)
-#pars <- sapply(1:np, function(i) pars01[, i] * (upper_bound[i] - lower_bound[i]) + lower_bound[i])
-
 config_files <- base_config
 week_offset <- min(periods[[1]]) - 1
-param_offset <- 0
 output_counter <- 1
 output = list()
 
@@ -213,6 +207,8 @@ for (weeks in periods){
   
   sims_long <- res$sims
   results_long <- cbind(res$Y, res$pars[, 1:np])
+  results_long[,param_id:= param_id + param_offset]
+  sims_long[,param_id:= param_id + param_offset]
   data.table::setkey(results_long, "simerr")
 
   # Forecasting
@@ -278,9 +274,8 @@ for (weeks in periods){
   # update counters
   output[[output_counter]] <- out
   output_counter <- output_counter + 1
-  week_offset <- max(weeks)
-  param_offset <- param_offset + max(results_long$param_id)
-
+  week_offset <- next_week - 1
+  param_offset <- param_offset + tot_nsim
 }
 
 
@@ -294,5 +289,8 @@ analysis_time_hours_minutes_seconds <- sprintf("%02d:%02d:%02d (hh:mm:ss)", h, m
 
 cat('Analysis finished in ',analysis_time_hours_minutes_seconds,'\n')
 cat(msg_header_footer(),'\n')
+if(36 %in% weeks){
+browser()
+}
 return(output)
 }
