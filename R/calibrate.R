@@ -251,12 +251,14 @@ for (weeks in periods){
   
   if(calibration_strategy == 'moving_window'){
     next_week = max(weeks) + 1 - moving_window_size
+    week_offset <- next_week - 1
   }
   else{
     next_week = max(weeks)
+    week_offset <- next_week - 1
   }
   checkpoint_files <-  sprintf("%s%03d.RDS",metadata[,run_id],next_week)
-  new_start_date = sims_rerun[week==next_week,max(date)] + 1
+  new_start_date = sims_rerun[week==(next_week-1),max(date)] + 1
   #cleanup_config_files(base_config,config_files)
   
   config_files <- sapply(checkpoint_files,make_checkpoint_yaml,
@@ -274,7 +276,7 @@ for (weeks in periods){
   # update counters
   output[[output_counter]] <- out
   output_counter <- output_counter + 1
-  week_offset <- next_week - 1
+  #week_offset <- next_week - 1
   param_offset <- param_offset + tot_nsim
 }
 
