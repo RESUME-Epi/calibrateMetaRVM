@@ -291,8 +291,5 @@ analysis_time_hours_minutes_seconds <- sprintf("%02d:%02d:%02d (hh:mm:ss)", h, m
 
 cat('Analysis finished in ',analysis_time_hours_minutes_seconds,'\n')
 cat(msg_header_footer(),'\n')
-if(36 %in% weeks){
-browser()
-}
 return(output)
 }
