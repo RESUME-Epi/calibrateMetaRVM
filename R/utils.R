@@ -13,7 +13,7 @@ make_checkpoint_yaml <- function(checkpoint_file,base_yaml_file,new_start_date){
   data_dir <- dirname(base_yaml_file)[1]
   yml <- yaml::read_yaml(base_yaml_file[1])
   yml2 <- copy(yml)
-  yml2$simulation_config$start_date <- new_start_date
+  yml2$simulation_config$start_date <- as.character(format.Date(as.Date(new_start_date),'%m/%d/%Y'))
   yml2$simulation_config$restore_from <- xfun::relative_path(checkpoint_file,dir = data_dir)
   yml2$population_data$initialization <- NULL
   fp_out <- stringr::str_replace(checkpoint_file, 
