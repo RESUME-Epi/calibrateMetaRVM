@@ -104,6 +104,7 @@ run_sims <- function(pars,weeks,configs,metadata = NULL,return.full=F,week_offse
 #'  \item \code{checkpoints}: \code{data.table} with parameter id and stem of checkpoint file name
 #'  \item \code{sims_forecast}: simulations sampled from \code{sims_post} for \code{forecast_horizon} weeks
 #'  \item \code{config_files}: vector of configuration files with checkpoints for next period of calibration
+#'  \item \code{call}: function call with input arguments
 #'}
 #'@export
 calibrate_metaRVM <- function(ground_truth,
@@ -216,7 +217,7 @@ for (weeks in periods){
     cat(">> Forecasting\n")
   }
   
-  sims_forecast <- make_forecast(
+  forecast_result <- make_forecast(
     results_long = results_long,
     weeks = weeks,
     config_files = config_files,
@@ -224,7 +225,8 @@ for (weeks in periods){
     nsamples = n_forecast_samples,
     np = np
   )
-
+  sims_forecast <- forecast_result$sims_forecast
+  pars_forecast <- forecast_result$pars_forecast
   # TODO: possibly combine forecast and checkpointing in one go
   # by defining a checkpointing data
 
@@ -271,7 +273,9 @@ for (weeks in periods){
              sims_post = sims_post,
              checkpoints = metadata,
              sims_forecast = sims_forecast,
-             config_files = config_files
+             pars_forecast = pars_forecast,
+             config_files = config_files,
+             call = match.call()
         )
   # update counters
   output[[output_counter]] <- out

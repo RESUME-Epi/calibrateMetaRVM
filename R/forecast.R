@@ -10,7 +10,7 @@ run_forecast_sims <- function(pars,weeks,configs,metadata = NULL,return.full=F, 
     metadata = data.table::data.table(run_id = 1:nrow(pars),do_chk = F)
   }
   sims <- foreach::foreach(i = 1:nrow(pars),
-                           export = c("run_sim","process_vac_data","base_config."),
+                           .export = c("run_sim","process_vac_data","base_config."),
                            .packages = c("MetaRVM","magrittr"),
                            .combine = rbind,.inorder = T)  %do% {
   withCallingHandlers({
@@ -40,7 +40,8 @@ run_forecast_sims <- function(pars,weeks,configs,metadata = NULL,return.full=F, 
     return.full = return.full
   )
   
-  sim_res[, param_id := i]
+  sim_res[, param_id := param_id]
+  sim_res[, run_id := run_id]
   sim_res
   }
   )
@@ -71,17 +72,21 @@ make_forecast <- function(
 
   results_forecast <- posterior[sampled_indices, ]
   pars_rerun <- posterior[sampled_indices, c(3+(1:np), 3), with = F]
-
+  metadata <- data.table::data.table(run_id = 1:nrow(pars_rerun),
+                                     param_id = posterior[sampled_indices,param_id],
+                                     do_chk = F)
   # 4. Rerun 
   forecast_horizon <- 4
   sims_forecast <- run_forecast_sims(
       pars = pars_rerun,
       weeks = c(weeks, max(weeks) + (1:forecast_horizon)),
       configs = config_files,
-      metadata = NULL,
+      metadata = metadata,
       return.full = TRUE,
       week_offset = min(weeks) -1
   )
-  return(sims_forecast)
+  pars_forecast <- cbind(posterior[sampled_indices,c("param_id")],pars_rerun)
+  out = list(sims_forecast = sims_forecast, pars_forecast = pars_rerun)
+  return(out)
 }
 
